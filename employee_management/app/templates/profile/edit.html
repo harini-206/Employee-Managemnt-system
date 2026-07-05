@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-person-circle"></i> My Profile</h3>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card p-4">
+      {% if not employee %}
+      <div class="alert alert-warning mb-0">No employee record is linked to your account yet. Please contact an administrator.</div>
+      {% else %}
+      <div class="text-center mb-3">
+        <img src="{{ url_for('static', filename='uploads/profile_pics/' + employee.profile_pic) if employee.profile_pic != 'default.png' else url_for('static', filename='img/default.png') }}" class="profile-pic-lg" onerror="this.style.display='none'">
+      </div>
+      <table class="table table-borderless">
+        <tr><th>Name</th><td>{{ employee.full_name }}</td></tr>
+        <tr><th>Email</th><td>{{ employee.email }}</td></tr>
+        <tr><th>Department</th><td>{{ employee.department.name if employee.department else "—" }}</td></tr>
+        <tr><th>Designation</th><td>{{ employee.designation or "—" }}</td></tr>
+      </table>
+      <hr>
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.phone.label(class="form-label") }}
+          {{ form.phone(class="form-control") }}
+        </div>
+        <div class="mb-3">
+          {{ form.address.label(class="form-label") }}
+          {{ form.address(class="form-control", rows=2) }}
+        </div>
+        <div class="mb-3">
+          {{ form.profile_pic.label(class="form-label") }}
+          {{ form.profile_pic(class="form-control") }}
+          {% for error in form.profile_pic.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-4">
+      <h5>Security</h5>
+      <a href="{{ url_for('profile.change_password') }}" class="btn btn-outline-secondary w-100"><i class="bi bi-key"></i> Change Password</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

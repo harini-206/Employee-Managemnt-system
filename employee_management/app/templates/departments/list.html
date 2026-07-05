@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Departments{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3><i class="bi bi-diagram-3"></i> Departments</h3>
+  <a href="{{ url_for('departments.add_department') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Department</a>
+</div>
+
+<div class="card">
+  <table class="table table-hover mb-0 align-middle">
+    <thead class="table-light">
+      <tr><th>Name</th><th>Description</th><th>Employees</th><th class="text-end">Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for d in departments %}
+      <tr>
+        <td>{{ d.name }}</td>
+        <td>{{ d.description or "—" }}</td>
+        <td><span class="badge bg-primary">{{ d.employees|length }}</span></td>
+        <td class="text-end">
+          <a href="{{ url_for('departments.edit_department', department_id=d.id) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+          <form action="{{ url_for('departments.delete_department', department_id=d.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete {{ d.name }}?');">
+            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-muted py-4">No departments yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

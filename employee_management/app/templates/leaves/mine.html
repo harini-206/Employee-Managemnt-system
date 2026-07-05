@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}My Leaves{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3><i class="bi bi-envelope-paper"></i> My Leave Requests</h3>
+  <a href="{{ url_for('leaves.apply_leave') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Apply for Leave</a>
+</div>
+
+<div class="card">
+  <table class="table mb-0 align-middle">
+    <thead class="table-light">
+      <tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th><th>Comment</th><th class="text-end">Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for l in leaves %}
+      <tr>
+        <td>{{ l.leave_type }}</td>
+        <td>{{ l.start_date }}</td>
+        <td>{{ l.end_date }}</td>
+        <td>{{ l.days_requested }}</td>
+        <td><span class="badge bg-{{ 'success' if l.status == 'Approved' else 'danger' if l.status == 'Rejected' else 'secondary' }}">{{ l.status }}</span></td>
+        <td>{{ l.review_comment or "—" }}</td>
+        <td class="text-end">
+          {% if l.status == 'Pending' %}
+          <form action="{{ url_for('leaves.cancel_leave', leave_id=l.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Cancel this request?');">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" class="text-center text-muted py-4">You haven't submitted any leave requests yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

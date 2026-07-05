@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ employee.full_name }}{% endblock %}
+{% block content %}
+<div class="card p-4">
+  <div class="row">
+    <div class="col-md-3 text-center">
+      <img src="{{ url_for('static', filename='uploads/profile_pics/' + employee.profile_pic) if employee.profile_pic != 'default.png' else url_for('static', filename='img/default.png') }}" class="profile-pic-lg" onerror="this.style.display='none'">
+      <h4 class="mt-3">{{ employee.full_name }}</h4>
+      <span class="badge bg-{{ 'success' if employee.is_active else 'secondary' }}">{{ "Active" if employee.is_active else "Inactive" }}</span>
+    </div>
+    <div class="col-md-9">
+      <table class="table table-borderless">
+        <tr><th>Email</th><td>{{ employee.email }}</td></tr>
+        <tr><th>Phone</th><td>{{ employee.phone or "—" }}</td></tr>
+        <tr><th>Department</th><td>{{ employee.department.name if employee.department else "—" }}</td></tr>
+        <tr><th>Designation</th><td>{{ employee.designation or "—" }}</td></tr>
+        <tr><th>Date Joined</th><td>{{ employee.date_joined or "—" }}</td></tr>
+        <tr><th>Salary</th><td>{{ "%.2f"|format(employee.salary) }}</td></tr>
+        <tr><th>Address</th><td>{{ employee.address or "—" }}</td></tr>
+      </table>
+      {% if current_user.is_admin %}
+      <a href="{{ url_for('employees.edit_employee', employee_id=employee.id) }}" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Edit</a>
+      <a href="{{ url_for('employees.list_employees') }}" class="btn btn-outline-primary">Back to List</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

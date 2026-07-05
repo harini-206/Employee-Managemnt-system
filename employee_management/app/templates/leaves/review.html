@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Review Leave Request{% endblock %}
+{% block content %}
+<h3 class="mb-4">Review Leave Request</h3>
+<div class="card p-4 col-md-6">
+  <p><strong>Employee:</strong> {{ leave.employee.full_name }}</p>
+  <p><strong>Type:</strong> {{ leave.leave_type }}</p>
+  <p><strong>Dates:</strong> {{ leave.start_date }} to {{ leave.end_date }} ({{ leave.days_requested }} day(s))</p>
+  <p><strong>Reason:</strong> {{ leave.reason }}</p>
+  <hr>
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.status.label(class="form-label") }}
+      {{ form.status(class="form-select") }}
+    </div>
+    <div class="mb-3">
+      {{ form.review_comment.label(class="form-label") }}
+      {{ form.review_comment(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+    <a href="{{ url_for('leaves.list_leaves') }}" class="btn btn-outline-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

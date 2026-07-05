@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h3 class="mb-4">{{ title }}</h3>
+<div class="card p-4">
+  <form method="POST" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="row g-3">
+      <div class="col-md-6">
+        {{ form.first_name.label(class="form-label") }}
+        {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
+        {% for error in form.first_name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="col-md-6">
+        {{ form.last_name.label(class="form-label") }}
+        {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
+        {% for error in form.last_name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="col-md-6">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+        {% for error in form.email.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="col-md-6">
+        {{ form.phone.label(class="form-label") }}
+        {{ form.phone(class="form-control") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.department_id.label(class="form-label") }}
+        {{ form.department_id(class="form-select") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.designation.label(class="form-label") }}
+        {{ form.designation(class="form-control") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.date_joined.label(class="form-label") }}
+        {{ form.date_joined(class="form-control", type="date") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.salary.label(class="form-label") }}
+        {{ form.salary(class="form-control") }}
+      </div>
+      <div class="col-md-12">
+        {{ form.address.label(class="form-label") }}
+        {{ form.address(class="form-control", rows=2) }}
+      </div>
+      <div class="col-md-6">
+        {{ form.profile_pic.label(class="form-label") }}
+        {{ form.profile_pic(class="form-control") }}
+        {% for error in form.profile_pic.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="col-md-6 d-flex align-items-center">
+        <div class="form-check mt-4">
+          {{ form.is_active(class="form-check-input") }}
+          {{ form.is_active.label(class="form-check-label") }}
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      {{ form.submit(class="btn btn-primary") }}
+      <a href="{{ url_for('employees.list_employees') }}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

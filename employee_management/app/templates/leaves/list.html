@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Leave Requests{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-envelope-paper"></i> Leave Requests</h3>
+
+<div class="mb-3">
+  <a href="{{ url_for('leaves.list_leaves') }}" class="btn btn-sm btn-outline-secondary {% if not status %}active{% endif %}">All</a>
+  <a href="{{ url_for('leaves.list_leaves', status='Pending') }}" class="btn btn-sm btn-outline-warning {% if status == 'Pending' %}active{% endif %}">Pending</a>
+  <a href="{{ url_for('leaves.list_leaves', status='Approved') }}" class="btn btn-sm btn-outline-success {% if status == 'Approved' %}active{% endif %}">Approved</a>
+  <a href="{{ url_for('leaves.list_leaves', status='Rejected') }}" class="btn btn-sm btn-outline-danger {% if status == 'Rejected' %}active{% endif %}">Rejected</a>
+</div>
+
+<div class="card">
+  <table class="table table-hover mb-0 align-middle">
+    <thead class="table-light">
+      <tr><th>Employee</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th><th class="text-end">Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for l in leaves %}
+      <tr>
+        <td>{{ l.employee.full_name }}</td>
+        <td>{{ l.leave_type }}</td>
+        <td>{{ l.start_date }}</td>
+        <td>{{ l.end_date }}</td>
+        <td>{{ l.days_requested }}</td>
+        <td><span class="badge bg-{{ 'success' if l.status == 'Approved' else 'danger' if l.status == 'Rejected' else 'secondary' }}">{{ l.status }}</span></td>
+        <td class="text-end">
+          {% if l.status == 'Pending' %}
+          <a href="{{ url_for('leaves.review_leave', leave_id=l.id) }}" class="btn btn-sm btn-outline-primary">Review</a>
+          {% else %}
+          <span class="text-muted small">{{ l.review_comment or "" }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" class="text-center text-muted py-4">No leave requests found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="mt-3">{% include "includes/pagination.html" %}</div>
+{% endblock %}

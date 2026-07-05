@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h3>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card stat-card p-3 text-center">
+      <i class="bi bi-people display-6 text-primary"></i>
+      <h2>{{ stats.total_employees }}</h2>
+      <div class="text-muted">Active Employees</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card stat-card p-3 text-center">
+      <i class="bi bi-diagram-3 display-6 text-success"></i>
+      <h2>{{ stats.total_departments }}</h2>
+      <div class="text-muted">Departments</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card stat-card p-3 text-center">
+      <i class="bi bi-calendar-check display-6 text-info"></i>
+      <h2>{{ stats.present_today }}</h2>
+      <div class="text-muted">Present Today</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card stat-card p-3 text-center">
+      <i class="bi bi-hourglass-split display-6 text-warning"></i>
+      <h2>{{ stats.pending_leaves }}</h2>
+      <div class="text-muted">Pending Leaves</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5><i class="bi bi-diagram-3"></i> Employees per Department</h5>
+      <ul class="list-group list-group-flush">
+        {% for name, count in dept_counts %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ name }}</span><span class="badge bg-primary rounded-pill">{{ count }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">No departments yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5><i class="bi bi-envelope-paper"></i> Recent Leave Requests</h5>
+      <ul class="list-group list-group-flush">
+        {% for l in recent_leaves %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ l.employee.full_name }} &mdash; {{ l.leave_type }} ({{ l.start_date }} to {{ l.end_date }})</span>
+          <span class="badge bg-{{ 'success' if l.status == 'Approved' else 'danger' if l.status == 'Rejected' else 'secondary' }}">{{ l.status }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">No leave requests yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

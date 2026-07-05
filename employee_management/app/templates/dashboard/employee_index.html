@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-speedometer2"></i> My Dashboard</h3>
+
+{% if not employee %}
+<div class="alert alert-warning">Your account isn't linked to an employee profile yet. Please contact an administrator.</div>
+{% else %}
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <h5>{{ employee.full_name }}</h5>
+      <p class="text-muted mb-0">{{ employee.designation or "—" }}</p>
+      <p class="text-muted small">{{ employee.department.name if employee.department else "No department" }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5><i class="bi bi-calendar-check"></i> Recent Attendance</h5>
+      <ul class="list-group list-group-flush">
+        {% for a in my_attendance %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ a.date }}</span>
+          <span class="badge bg-{{ 'success' if a.status == 'Present' else 'danger' if a.status == 'Absent' else 'secondary' }}">{{ a.status }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">No attendance records yet.</li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('attendance.my_attendance') }}" class="btn btn-sm btn-outline-primary mt-2">View All</a>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5><i class="bi bi-envelope-paper"></i> Recent Leave Requests</h5>
+      <ul class="list-group list-group-flush">
+        {% for l in my_leaves %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ l.leave_type }} ({{ l.start_date }} to {{ l.end_date }})</span>
+          <span class="badge bg-{{ 'success' if l.status == 'Approved' else 'danger' if l.status == 'Rejected' else 'secondary' }}">{{ l.status }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted">No leave requests yet.</li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('leaves.apply_leave') }}" class="btn btn-sm btn-outline-primary mt-2">Apply for Leave</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

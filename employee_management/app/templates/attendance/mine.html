@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}My Attendance{% endblock %}
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-calendar-check"></i> My Attendance</h3>
+<div class="card">
+  <table class="table mb-0 align-middle">
+    <thead class="table-light"><tr><th>Date</th><th>Status</th><th>Remarks</th></tr></thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td>{{ r.date }}</td>
+        <td><span class="badge bg-{{ 'success' if r.status == 'Present' else 'danger' if r.status == 'Absent' else 'warning' }}">{{ r.status }}</span></td>
+        <td>{{ r.remarks or "—" }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3" class="text-center text-muted py-4">No attendance records yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="mt-3">{% include "includes/pagination.html" %}</div>
+{% endblock %}
